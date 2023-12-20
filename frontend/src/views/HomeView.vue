@@ -8,7 +8,7 @@ import {
   normalizeIngredients,
   normalizeSauces,
   normalizeSizes,
-} from "@/common/data/normalize";
+} from "@/common/normalize";
 
 const dough = doughJSON.map(normalizeDough);
 const ingredients = ingredientsJSON.map(normalizeIngredients);

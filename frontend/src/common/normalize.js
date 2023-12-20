@@ -1,4 +1,4 @@
-import { getValueByID } from "@/common/data/helpers";
+import { getValueByID } from "@/common/helpers";
 import doughSizes from "@/common/data/doughSizes";
 import ingredientTypes from "@/common/data/ingredients";
 import saucesTypes from "@/common/data/sauces";
