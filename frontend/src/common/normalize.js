@@ -31,3 +31,15 @@ export const normalizeSizes = (sizeItem) => {
     type: getValueByID(sizeItem.id, sizesTypes),
   };
 };
+
+export const normalizeMisc = (miscItem) => {
+  return {
+    ...miscItem,
+  };
+};
+
+export const normalizeAddresses = (addressItem) => {
+  return {
+    ...addressItem,
+  };
+};
