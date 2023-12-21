@@ -3,8 +3,8 @@ import { getImage } from "@/common/helpers";
 
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    required: true,
   },
   doughItems: {
     type: Array,
@@ -29,10 +29,10 @@ const emit = defineEmits(["update:modelValue"]);
           <input
             type="radio"
             name="dough"
-            :value="modelValue"
-            :checked="doughType.type === modelValue"
+            :value="doughType.id"
+            :checked="doughType.id === modelValue"
             class="visually-hidden"
-            @input="emit('update:modelValue', doughType.type)"
+            @input="emit('update:modelValue', doughType.id)"
           />
           <img
             height="36"

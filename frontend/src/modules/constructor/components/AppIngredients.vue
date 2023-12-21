@@ -5,6 +5,9 @@ import { MAX_INGREDIENT_COUNT } from "@/common/constants";
 import { getImage } from "@/common/helpers";
 import AppDrag from "@/common/components/AppDrag.vue";
 import AppCounter from "@/common/components/AppCounter.vue";
+import { usePizzaStore } from "@/stores";
+
+const pizzaStore = usePizzaStore();
 
 const props = defineProps({
   modelValue: {
@@ -16,28 +19,7 @@ const props = defineProps({
     default: () => [],
   },
 });
-const emit = defineEmits(["update"]);
 const values = toRef(props, "modelValue");
-
-const getValue = (ingredient) => {
-  return values.value[ingredient] ?? 0;
-};
-
-const setValue = (ingredient, count) => {
-  emit("update", ingredient, Number(count));
-};
-
-const decrementValue = (ingredient) => {
-  setValue(ingredient, getValue(ingredient) - 1);
-};
-
-const incrementValue = (ingredient) => {
-  setValue(ingredient, getValue(ingredient) + 1);
-};
-
-const inputValue = (ingredient, count) => {
-  return setValue(ingredient, Math.min(MAX_INGREDIENT_COUNT, Number(count)));
-};
 </script>
 
 <template>
@@ -52,7 +34,7 @@ const inputValue = (ingredient, count) => {
       >
         <app-drag
           :data-transfer="ingredient"
-          :draggable="getValue(ingredient.type) < MAX_INGREDIENT_COUNT"
+          :draggable="values[ingredient.id] < MAX_INGREDIENT_COUNT"
         >
           <div class="filling">
             <img :src="getImage(ingredient.image)" :alt="ingredient.name" />
@@ -62,12 +44,14 @@ const inputValue = (ingredient, count) => {
 
         <app-counter
           class="ingredients__counter"
-          :value="getValue(ingredient.type)"
-          :minus-disabled="getValue(ingredient.type) === 0"
-          :plus-disabled="getValue(ingredient.type) === MAX_INGREDIENT_COUNT"
-          @decrement="decrementValue(ingredient.type)"
-          @increment="incrementValue(ingredient.type)"
-          @update="(count) => inputValue(ingredient.type, count)"
+          :value="values[ingredient.id]"
+          :minus-disabled="values[ingredient.id] === 0"
+          :plus-disabled="values[ingredient.id] === MAX_INGREDIENT_COUNT"
+          @increment="pizzaStore.incrementIngredientQuantity(ingredient.id)"
+          @decrement="pizzaStore.decrementIngredientQuantity(ingredient.id)"
+          @update="
+            (count) => pizzaStore.setIngredientQuantity(ingredient.id, count)
+          "
         />
       </li>
     </ul>

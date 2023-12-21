@@ -1,8 +1,8 @@
 <script setup>
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    required: true,
   },
   sizeItems: {
     type: Array,
@@ -28,10 +28,10 @@ const emit = defineEmits(["update:modelValue"]);
           <input
             type="radio"
             name="diameter"
-            :value="modelValue"
-            :checked="size.type === modelValue"
+            :value="size.id"
+            :checked="size.id === modelValue"
             class="visually-hidden"
-            @input="emit('update:modelValue', size.type)"
+            @input="emit('update:modelValue', size.id)"
           />
           <span>{{ size.name }}</span>
         </label>

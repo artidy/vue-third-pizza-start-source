@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { useDataStore } from "@/stores/data";
 import { ingredientsQuantity, pizzaPrice } from "@/common/helpers";
+import { MAX_INGREDIENT_COUNT } from "@/common/constants";
 
 export const usePizzaStore = defineStore("pizza", {
   state: () => ({
@@ -80,9 +81,30 @@ export const usePizzaStore = defineStore("pizza", {
         return;
       }
 
+      if (this.ingredients[ingredientIdx].quantity === MAX_INGREDIENT_COUNT) {
+        return;
+      }
+
       this.ingredients[ingredientIdx].quantity++;
     },
+    decrementIngredientQuantity(ingredientId) {
+      const ingredientIdx = this.ingredients.findIndex(
+        (item) => item.ingredientId === ingredientId,
+      );
+
+      if (ingredientIdx === -1) {
+        return;
+      }
+
+      if (this.ingredients[ingredientIdx].quantity === 1) {
+        this.ingredients.splice(ingredientIdx, 1);
+        return;
+      }
+
+      this.ingredients[ingredientIdx].quantity--;
+    },
     setIngredientQuantity(ingredientId, count) {
+      let valueCount = Math.min(Number(count), MAX_INGREDIENT_COUNT);
       const ingredientIdx = this.ingredients.findIndex(
         (item) => item.ingredientId === ingredientId,
       );
@@ -91,7 +113,7 @@ export const usePizzaStore = defineStore("pizza", {
        * Добавляем ингредиент, если его нет, а количество больше 0
        * Если ингредиента нет, а количество 0 или меньше, то ничего не делаем
        */
-      if (ingredientIdx === -1 && count > 0) {
+      if (ingredientIdx === -1 && valueCount > 0) {
         this.addIngredient(ingredientId);
         return;
       } else if (ingredientIdx === -1) {
@@ -99,12 +121,12 @@ export const usePizzaStore = defineStore("pizza", {
       }
 
       /* Удаляем ингредиент, если количество 0 */
-      if (count === 0) {
+      if (valueCount === 0) {
         this.ingredients.splice(ingredientIdx, 1);
         return;
       }
 
-      this.ingredients[ingredientIdx].quantity = count;
+      this.ingredients[ingredientIdx].quantity = valueCount;
     },
     loadPizza(pizza) {
       this.index = pizza.index;

@@ -1,8 +1,8 @@
 <script setup>
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    required: true,
   },
   sauceItems: {
     type: Array,
@@ -25,9 +25,9 @@ const emit = defineEmits(["update:modelValue"]);
       <input
         type="radio"
         name="sauce"
-        :value="modelValue"
-        :checked="sauce.type === modelValue"
-        @input="emit('update:modelValue', sauce.type)"
+        :value="sauce.id"
+        :checked="sauce.id === modelValue"
+        @input="emit('update:modelValue', sauce.id)"
       />
       <span>{{ sauce.name }}</span>
     </label>
