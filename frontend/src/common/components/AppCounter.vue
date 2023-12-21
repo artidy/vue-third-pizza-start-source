@@ -46,8 +46,8 @@ const emit = defineEmits(["update", "decrement", "increment"]);
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/scss/ds-system/ds.scss";
-@import "@/assets/scss/mixins/mixins.scss";
+@import "@/assets/scss/ds-system/ds";
+@import "@/assets/scss/mixins/mixins";
 
 .counter {
   display: flex;

@@ -4,7 +4,7 @@ import { toRef } from "vue";
 import { MAX_INGREDIENT_COUNT } from "@/common/constants";
 import { getImage } from "@/common/helpers";
 import AppDrag from "@/common/components/AppDrag.vue";
-import AppCounter from "@/modules/constructor/components/AppCounter.vue";
+import AppCounter from "@/common/components/AppCounter.vue";
 
 const props = defineProps({
   modelValue: {
