@@ -2,10 +2,10 @@
 import { toRef } from "vue";
 
 import { MAX_INGREDIENT_COUNT } from "@/common/constants";
-import { getImage } from "@/common/helpers";
 import AppDrag from "@/common/components/AppDrag.vue";
 import AppCounter from "@/common/components/AppCounter.vue";
 import { usePizzaStore } from "@/stores";
+import { getPublicImage } from "@/common/helpers";
 
 const pizzaStore = usePizzaStore();
 
@@ -37,7 +37,7 @@ const values = toRef(props, "modelValue");
           :draggable="values[ingredient.id] < MAX_INGREDIENT_COUNT"
         >
           <div class="filling">
-            <img :src="getImage(ingredient.image)" :alt="ingredient.name" />
+            <img :src="getPublicImage(ingredient.image)" :alt="ingredient.name" />
             {{ ingredient.name }}
           </div>
         </app-drag>

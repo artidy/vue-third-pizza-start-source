@@ -1,8 +1,56 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import { clearValidationErrors } from "@/common/validator";
 
+const authStore = useAuthStore();
+const router = useRouter();
 const email = ref("");
 const password = ref("");
+const errorMessage = ref(null);
+const validations = ref(resetValidations());
+
+const login = async () => {
+  const resMsg = await authStore.login({
+    email: email.value,
+    password: password.value,
+  });
+
+  /* При успешной авторизации перенаправляем пользователя на главную страницу */
+  if (resMsg === "success") {
+    await authStore.whoami();
+    await router.push({ name: "home" });
+  } else {
+    errorMessage.value = resMsg;
+  }
+};
+
+const resetValidations = () => {
+  return {
+    email: {
+      error: "",
+      rules: ["required", "email"],
+    },
+    password: {
+      error: "",
+      rules: ["required"],
+    },
+  };
+};
+
+const watchField = (field) => () => {
+  if (errorMessage.value) {
+    errorMessage.value = null;
+  }
+
+  if (validations.value[field]?.error) {
+    clearValidationErrors(validations.value);
+  }
+};
+
+watch(email, watchField("email"));
+watch(password, watchField("password"));
 </script>
 
 <template>
@@ -13,7 +61,7 @@ const password = ref("");
     <div class="sign-form__title">
       <h1 class="title title--small">Авторизуйтесь на сайте</h1>
     </div>
-    <form action="#" method="post">
+    <form method="post" @submit.prevent="login">
       <div class="sign-form__input">
         <label class="input">
           <span>E-mail</span>
@@ -24,6 +72,9 @@ const password = ref("");
             placeholder="example@mail.ru"
           />
         </label>
+        <div class="sign-form__input-error">
+          {{ validations.email.error }}
+        </div>
       </div>
 
       <div class="sign-form__input">
@@ -36,8 +87,14 @@ const password = ref("");
             placeholder="***********"
           />
         </label>
+        <div class="sign-form__input-error">
+          {{ validations.email.error }}
+        </div>
       </div>
       <button type="submit" class="button">Авторизоваться</button>
+      <div class="server-error">
+        {{ errorMessage }}
+      </div>
     </form>
   </div>
 </template>
@@ -57,7 +114,7 @@ const password = ref("");
   width: 455px;
   padding: 146px 32px 32px;
 
-  background: $white url("@/assets/img/popup.svg") no-repeat center top;
+  background: $white url("/api/public/img/popup.svg") no-repeat center top;
   box-shadow: $shadow-light;
 
   button {
@@ -136,5 +193,23 @@ const password = ref("");
       background-color: $white;
     }
   }
+}
+
+.server-error {
+  height: 16px;
+  color: $red-800;
+  margin-top: 20px;
+}
+
+.sign-form__input-error,
+.server-error {
+  height: 16px;
+  color: $red-800;
+}
+.sign-form__input-error {
+  margin-top: 4px;
+}
+.server-error {
+  margin-top: 20px;
 }
 </style>

@@ -42,3 +42,9 @@ export const pizzaPrice = (pizza) => {
 
   return (doughPrice + saucePrice + ingredientsPrice) * sizeMultiplier;
 };
+
+export const getPublicImage = (path) => {
+  const publicUrl = "/api";
+  const divider = path.startsWith("/") ? "" : "/";
+  return [publicUrl, path].join(divider);
+};

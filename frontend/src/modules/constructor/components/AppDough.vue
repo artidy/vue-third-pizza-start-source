@@ -1,5 +1,6 @@
 <script setup>
-import { getImage } from "@/common/helpers";
+
+import { getPublicImage } from "@/common/helpers";
 
 defineProps({
   modelValue: {
@@ -37,7 +38,7 @@ const emit = defineEmits(["update:modelValue"]);
           <img
             height="36"
             width="36"
-            :src="getImage(doughType.image)"
+            :src="getPublicImage(doughType.image)"
             :alt="doughType.name"
           />
 

@@ -1,4 +1,16 @@
-<script setup></script>
+<script setup>
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
+import { getPublicImage } from "@/common/helpers";
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const logout = async () => {
+  await authStore.logout();
+  await router.replace({ name: "login" });
+};
+</script>
 
 <template>
   <header class="header">
@@ -16,27 +28,24 @@
       <router-link :to="{ name: 'cart' }">0 ₽</router-link>
     </div>
     <div class="header__user">
-      <router-link :to="{ name: 'profile' }">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              @/assets/img/users/user5.webp    1x,
-              @/assets/img/users/user5@2x.webp 2x
-            "
-          />
-          <img
-            src="@/assets/img/users/user5.jpg"
-            srcset="@/assets/img/users/user5@2x.jpg"
-            alt="Василий Ложкин"
-            width="32"
-            height="32"
-          />
-        </picture>
-        <span>Василий Ложкин</span>
+      <router-link v-if="authStore.isAuthenticated" :to="{ name: 'profile' }">
+        <img
+          :src="getPublicImage(authStore.user.avatar)"
+          :alt="authStore.user.name"
+          width="32"
+          height="32"
+        />
+        <span>{{ authStore.user.name }}</span>
       </router-link>
-      <router-link :to="{ name: 'home' }" class="header__logout">
+      <div
+        v-if="authStore.isAuthenticated"
+        class="header__logout"
+        @click="logout"
+      >
         <span>Выйти</span>
+      </div>
+      <router-link v-else :to="{ name: 'login' }" class="header__logout">
+        <span>Войти</span>
       </router-link>
     </div>
   </header>
@@ -80,7 +89,7 @@
 
     color: $white;
     background-color: $green-500;
-    background-image: url("@/assets/img/cart.svg");
+    background-image: url("/api/public/img/cart.svg");
     background-repeat: no-repeat;
     background-position: 20px center;
     background-size: 29px 27px;
@@ -162,7 +171,7 @@
     content: "";
     vertical-align: middle;
 
-    background: url(@/assets/img/login.svg) no-repeat center;
+    background: url(/api/public/img/login.svg) no-repeat center;
     background-size: auto 50%;
   }
 }
@@ -178,7 +187,7 @@
     content: "";
     vertical-align: middle;
 
-    background: url(@/assets/img/login.svg) no-repeat center;
+    background: url(/api/public/img/login.svg) no-repeat center;
     background-size: auto 50%;
   }
 }
