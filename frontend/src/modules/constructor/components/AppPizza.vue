@@ -30,16 +30,18 @@ const emit = defineEmits(["drop"]);
         :class="`pizza--foundation--${doughType}-${sauceType}`"
       >
         <div class="pizza__wrapper">
-          <div
-            v-for="item in ingredients"
-            :key="item.id"
-            class="pizza__filling"
-            :class="[
-              `pizza__filling--${item.type}`,
-              item.quantity === TWO_INGREDIENTS && 'pizza__filling--second',
-              item.quantity === THREE_INGREDIENTS && 'pizza__filling--third',
-            ]"
-          />
+          <transition-group name="scale">
+            <div
+              v-for="item in ingredients"
+              :key="item.id"
+              class="pizza__filling"
+              :class="[
+                `pizza__filling--${item.type}`,
+                item.quantity === TWO_INGREDIENTS && 'pizza__filling--second',
+                item.quantity === THREE_INGREDIENTS && 'pizza__filling--third',
+              ]"
+            />
+          </transition-group>
         </div>
       </div>
     </app-drop>
