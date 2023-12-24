@@ -4,6 +4,19 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { clearValidationErrors } from "@/common/validator";
 
+const resetValidations = () => {
+  return {
+    email: {
+      error: "",
+      rules: ["required", "email"],
+    },
+    password: {
+      error: "",
+      rules: ["required"],
+    },
+  };
+};
+
 const authStore = useAuthStore();
 const router = useRouter();
 const email = ref("");
@@ -24,19 +37,6 @@ const login = async () => {
   } else {
     errorMessage.value = resMsg;
   }
-};
-
-const resetValidations = () => {
-  return {
-    email: {
-      error: "",
-      rules: ["required", "email"],
-    },
-    password: {
-      error: "",
-      rules: ["required"],
-    },
-  };
 };
 
 const watchField = (field) => () => {
